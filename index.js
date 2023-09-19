@@ -1,3 +1,6 @@
+const fs = require("node:fs");
+const path = require("node:path");
+
 const xlsx = require("xlsx");
 const puppeteer = require("puppeteer");
 const pLimit = require("p-limit");
@@ -100,9 +103,11 @@ const jsonData = xlsx.utils.sheet_to_json(sheet);
 		}
 	});
 
+	const outputfile = path.resolve(__dirname, "./output.xlsx");
+	if(fs.existsSync(outputfile)) fs.unlinkSync(outputfile);
 	const newWorkbook = xlsx.utils.book_new();
 	const worksheet = xlsx.utils.aoa_to_sheet(data);
 	xlsx.utils.book_append_sheet(newWorkbook, worksheet, "Feuille1");
-	xlsx.writeFile(newWorkbook, "output.xlsx");
+	xlsx.writeFile(newWorkbook, outputfile);
 
 })();
